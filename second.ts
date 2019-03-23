@@ -81,6 +81,23 @@ const hdOptions = [
 displayOption(hdOptions)
 let ansHd = question("Choose your Hard Disk option:\n")
 
+
+console.log('You Have Chosen the following options: ')
+const prices = [
+  resOptions[ansRes].price,
+  videoCardOptions[ansVC].price,
+  processorOptions[ansProcessor].price,
+  hddOptions[ansHDD].price,
+]
+
+let totalPrice = 0
+
+for (let i in prices) {
+  totalPrice = totalPrice + prices[parseInt(i)]
+}
+
+console.log(totalPrice)
+
 console.log('Your Resolution option: ' + resOptions[ansRes])
 console.log('Your Video Card  option: ' + vcOptions[ansVc])
 console.log('Your Processor option: ' + processorOptions[ansProcessor])
