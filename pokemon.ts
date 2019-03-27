@@ -7,8 +7,8 @@ let oppPoisonEffect = 0
 //Pokemon types
 function displaypokemonOption(array) {
   let i = 0
-  while (i < 2) {
-    console.log(i + 1 + '. ' + array[i].name + " with " + array[i].hp + " HP. Atk: " + array[i].atk + ", Def: " + array[i].def)
+  while (i < 3) {
+    console.log(i + 1 + '.' + array[i].name + "\n  HP: " + array[i].hp + "\n  Atk: " + array[i].atk + "\n  Def: " + array[i].def + "\n  Type: " + array[i].type)
     i = i + 1
   }
 }
@@ -19,12 +19,21 @@ const pokemonOptions = [
     hp: 200,
     atk: 20,
     def: 20,
+    type: 'Water'
   },
   {
     name: 'Pikachu',
-    hp: 200,
+    hp: 250,
     atk: 25,
     def: 25,
+    type: 'Grass'
+  },
+  {
+    name: 'Charmander',
+    hp: 300,
+    atk: 25,
+    def: 25,
+    type: 'Fire'
   }
 ]
 
@@ -32,56 +41,61 @@ const pokemonOptions = [
 console.log("You have encounter your opponent.")
 console.log("Pokemon options:")
 displaypokemonOption(pokemonOptions)
-let oppPokemon = parseInt(question("What Pokemon your opponent want to use?\n"))
+let oppPokemon = parseInt(question("What Pokemon your opponent want to summon?\n"))
 oppPokemon = oppPokemon - 1
-console.log("Your opponent send in " + pokemonOptions[oppPokemon].name)
-console.log(pokemonOptions[oppPokemon].name + " stats:")
-console.log("HP: " + pokemonOptions[oppPokemon].hp + "\nATK: " + pokemonOptions[oppPokemon].atk + "\nDEF: " + pokemonOptions[oppPokemon].def)
+console.log("Your opponent summon " + pokemonOptions[oppPokemon].name)
+// console.log(pokemonOptions[oppPokemon].name + " stats:")
+// console.log("HP: " + pokemonOptions[oppPokemon].hp + "\nATK: " + pokemonOptions[oppPokemon].atk + "\nDEF: " + pokemonOptions[oppPokemon].def)
 
 // 2. You send in your pokemon.
 console.log("==========================")
 console.log("Pokemon options:")
 displaypokemonOption(pokemonOptions)
-let myPokemon = parseInt(question("What Pokemon you want to use?\n"))
+let myPokemon = parseInt(question("What Pokemon you want to summon?\n"))
 myPokemon = myPokemon - 1
-console.log("You send in " + pokemonOptions[myPokemon].name)
-console.log(pokemonOptions[myPokemon].name + " stats:")
-console.log("HP: " + pokemonOptions[myPokemon].hp + "\nATK: " + pokemonOptions[myPokemon].atk + "\nDEF: " + pokemonOptions[myPokemon].def)
+console.log("You summon " + pokemonOptions[myPokemon].name)
+// console.log(pokemonOptions[myPokemon].name + " stats:")
+// console.log("HP: " + pokemonOptions[myPokemon].hp + "\nATK: " + pokemonOptions[myPokemon].atk + "\nDEF: " + pokemonOptions[myPokemon].def)
 
 
 //move types
 function displaymoveOption(array) {
   let i = 0
-  while (i < 5) {
-    console.log(i + 1 + '. ' + array[i].name + " with " + array[i].type + " type does " + array[i].damage + " damages.")
+  while (i < 6) {
+    console.log(i + 1 + '.' + array[i].name + "\n  Damage: " + array[i].damage + "\n  Type: " + array[i].type)
     i = i + 1
   }
 }
 
 const movesOptions = [
   {
-    name: 'Tackle',
-    damage: 40,
-    type: 'Normal',
-  },
-  {
     name: 'Tail Whip',
     damage: 10,
-    type: 'Normal',
+    type: 'Deduct atk/def',
+  },
+  {
+    name: 'Tackle',
+    damage: 40,
+    type: 'Fire',
+  },
+  {
+    name: 'Hyper Beam',
+    damage: 10,
+    type: 'Grass',
   },
   {
     name: 'Thunder Shock',
-    damage: 30,
+    damage: 0,
     type: 'Poison',
   },
   {
     name: 'Reflect',
-    damage: 20,
+    damage: 0,
     type: 'Sleep',
   },
   {
     name: 'Body Slam',
-    damage: 10,
+    damage: 0,
     type: 'Paralysis',
   },
 ]
@@ -91,7 +105,8 @@ const movesOptions = [
 while (pokemonOptions[myPokemon].hp > 0 && pokemonOptions[oppPokemon].hp > 0) {
   let attackerName = isMyturn ? pokemonOptions[myPokemon].name : pokemonOptions[oppPokemon].name
   let defenderName = isMyturn ? pokemonOptions[oppPokemon].name : pokemonOptions[myPokemon].name
-
+  let getDmg
+  
   //random number between 10-50
   //const attackerDmg = Math.floor(Math.random() * 40 + 10)
 
@@ -102,20 +117,20 @@ while (pokemonOptions[myPokemon].hp > 0 && pokemonOptions[oppPokemon].hp > 0) {
   let ansMove = parseInt(question("What move " + attackerName + " want to use?\n"))
   ansMove = ansMove - 1
   console.log(attackerName + " use " + movesOptions[ansMove].name + " with " + movesOptions[ansMove].type + " effect.")
-  //console.log(movesOptions[ansMove].name + " hits for " + movesOptions[ansMove].damage)
 
 
   //status effect
-  if (movesOptions[ansMove].name === 'Tail Whip') {
+  if (movesOptions[ansMove].type === 'Deduct atk/def') {
     if (isMyturn) {
-      pokemonOptions[oppPokemon].atk = pokemonOptions[oppPokemon].atk - movesOptions[ansMove].damage
-      pokemonOptions[oppPokemon].def = pokemonOptions[oppPokemon].def - movesOptions[ansMove].damage
-      console.log(pokemonOptions[oppPokemon].name + "'s attack and defence are reduce to " + pokemonOptions[oppPokemon].atk + (" Atk, ") + pokemonOptions[oppPokemon].def + (" Def."))
+      pokemonOptions[oppPokemon].atk -= movesOptions[ansMove].damage
+      pokemonOptions[oppPokemon].def -= movesOptions[ansMove].damage
+      console.log(defenderName + "'s attack and defence are reduce to " + pokemonOptions[oppPokemon].atk + (" Atk, ") + pokemonOptions[oppPokemon].def + (" Def."))
     } else {
       pokemonOptions[myPokemon].atk = pokemonOptions[myPokemon].atk - movesOptions[ansMove].damage
       pokemonOptions[myPokemon].def = pokemonOptions[myPokemon].def - movesOptions[ansMove].damage
       console.log(pokemonOptions[myPokemon].name + "'s attack and defence are reduce to " + pokemonOptions[myPokemon].atk + (" Atk, ") + pokemonOptions[myPokemon].def + (" Def."))
     }
+
   }
   //Poison will damage the target for 10% per turn at the start of every turn for 5 turns
   else if (movesOptions[ansMove].type === 'Poison') {
@@ -143,15 +158,22 @@ while (pokemonOptions[myPokemon].hp > 0 && pokemonOptions[oppPokemon].hp > 0) {
     }
 
   }
+  //fire move is effective against grass pokemon
+  else if ((movesOptions[ansMove].type === 'Fire') && ((isMyturn == false && pokemonOptions[myPokemon].type === 'Grass') || (isMyturn == true && pokemonOptions[oppPokemon].type === 'Grass'))) {
+    getDmg = movesOptions[ansMove].damage * 2
+    console.log(defenderName + " get double damage.")
+    countDmg(getDmg)
+  }
+  //Water pokemon is resistant to grass move
+  else if ((movesOptions[ansMove].type === 'Grass') && ((isMyturn == false && pokemonOptions[myPokemon].type === 'Water') || (isMyturn == true && pokemonOptions[oppPokemon].type === 'Water'))) {
+    getDmg = movesOptions[ansMove].damage / 2
+    console.log(defenderName + " get halve damage.")
+    countDmg(getDmg)
+  }
+  //normal move
   else {
-    //display pokemon's health
-    if (isMyturn) {
-      pokemonOptions[oppPokemon].hp = pokemonOptions[oppPokemon].hp - (movesOptions[ansMove].damage + pokemonOptions[myPokemon].atk - pokemonOptions[oppPokemon].def)
-      console.log(pokemonOptions[oppPokemon].name + "'s health is reduce to " + pokemonOptions[oppPokemon].hp)
-    } else {
-      pokemonOptions[myPokemon].hp = pokemonOptions[myPokemon].hp - (movesOptions[ansMove].damage + pokemonOptions[oppPokemon].atk - pokemonOptions[myPokemon].def)
-      console.log(pokemonOptions[myPokemon].name + "'s health is reduce to " + pokemonOptions[myPokemon].hp)
-    }
+    getDmg = movesOptions[ansMove].damage
+    countDmg(getDmg)
   }
 
   //Poison effect:
@@ -177,7 +199,29 @@ while (pokemonOptions[myPokemon].hp > 0 && pokemonOptions[oppPokemon].hp > 0) {
   isMyturn = !isMyturn
 }
 
-
+//count and display defender get how much damage
+function countDmg(damage) {
+  if (isMyturn) {
+    if (pokemonOptions[myPokemon].atk > pokemonOptions[oppPokemon].def) {
+      pokemonOptions[oppPokemon].hp -= damage + pokemonOptions[myPokemon].atk - pokemonOptions[oppPokemon].def
+      console.log(pokemonOptions[oppPokemon].name + " get damage, HP is reduce to " + pokemonOptions[oppPokemon].hp)
+    }
+    else {
+      pokemonOptions[oppPokemon].hp -= damage
+      console.log(pokemonOptions[oppPokemon].name + " get damage, HP is reduce to " + pokemonOptions[oppPokemon].hp)
+    }
+  }
+  else {
+    if (pokemonOptions[oppPokemon].atk > pokemonOptions[myPokemon].def) {
+      pokemonOptions[myPokemon].hp -= damage + pokemonOptions[oppPokemon].atk - pokemonOptions[myPokemon].def
+      console.log(pokemonOptions[myPokemon].name + " get damage, HP is reduce to " + pokemonOptions[myPokemon].hp)
+    }
+    else {
+      pokemonOptions[myPokemon].hp -= damage
+      console.log(pokemonOptions[myPokemon].name + " get damage, HP is reduce to " + pokemonOptions[myPokemon].hp)
+    }
+  }
+}
 
 //game over message
 if (pokemonOptions[oppPokemon].hp <= 0) {
